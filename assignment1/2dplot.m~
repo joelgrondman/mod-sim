@@ -1,0 +1,14 @@
+
+K = 0.3;
+Init = rand(2,1);
+n = 1000;
+seq = zeros(n,2);
+
+for i=1:n
+   Init = chirikov_map(Init(1),Init(2),K);
+   zeros(i) = Init;
+    
+    
+end
+
+plot(Init)
