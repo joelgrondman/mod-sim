@@ -39,13 +39,14 @@ for K = startK:stepsize:endK
 end
 
 function t = isKam(seq)
-    if(max(seq(1)) > 1-.001)
+    maxDiff = .001;
+    if(max(seq(:,1)) < 1-maxDiff)
         t = false;
         return;
     end
     t = true;
     for i=2:size(seq,1)
-        if(seq(i,1)-seq(i-1,1) > .001 || seq(i,2)-seq(i-1,2) > .001)
+        if(seq(i,1)-seq(i-1,1) > maxDiff || seq(i,2)-seq(i-1,2) > maxDiff)
             t = false;
             return
         end
