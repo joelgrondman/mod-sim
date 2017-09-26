@@ -1,43 +1,54 @@
-
-
-n = 2000;
-orbits = 2000;
+n = 40000;
+orbits = 500;
 startK = .7;
-endK = 1100;
+endK = 10;
 stepsize = 0.01;
 seq = zeros(n,2);
-set(gcf, 'Renderer', 'painters')
+%set(gcf, 'Renderer', 'painters')
 %set(gcf, 'Renderer', 'opengl')
-
 
 for K = startK:stepsize:endK
     % clf;
     kamCount = 0;
     for o=1:orbits
 
-        Init = rand(2,1);
+        Init = [0, rand(1,1)];
         for i=1:n
            [Init(1),Init(2)] = chirikov_map(Init(1),Init(2),K);
            seq(i,:) = Init;
         end
-        
-        sortedseq = sort(seq(:,1),1);
-        dif = diff(sortedseq,[],1);
        
-        if max(dif) < .001 && min(seq(:,1)) < .001 && max(seq(:,1)) > .999
-          %  plot(seq(:,1),seq(:,2),'k.','MarkerSize',0.01)
-          %  hold on
-          %  xlim([0 1])
-          %  ylim([0 1]);
-          kamCount = 1;
-          break;
-        end 
+        %plot(seq(:,1),seq(:,2),'k.','MarkerSize',0.01)
+        %hold on
+        %xlim([0 1]);
+        %ylim([0 1]);
+        
+        sortedseq = sortrows(seq);
+        if(isKam(sortedseq))
+            kamCount = 1;
+            break;
+        end;
+        %hold off
+        %pause
     end
-    if kamCount == 0
+    if kamCount == 0      
         disp(K)
         return;
     end
-    % hold off
-    % pause
 
+end
+
+function t = isKam(seq)
+    maxDiff = .001;
+    if(max(seq(:,1)) < 1-maxDiff)
+        t = false;
+        return;
+    end
+    t = true;
+    for i=2:size(seq,1)
+        if(seq(i,1)-seq(i-1,1) > maxDiff || seq(i,2)-seq(i-1,2) > maxDiff)
+            t = false;
+            return
+        end
+    end
 end

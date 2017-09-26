@@ -1,10 +1,7 @@
-K = 1.02;
-n = 10000;
-Inits = [0 0.1;
-         0 0.4;
-         0 0.5;
-         0 0.7777];
-Inits = rand(100,2);
+K = 1;
+n = 1000000;
+Inits = [0.25 0];
+%Inits = rand(100,2);
      
 orbits = size(Inits,1);
 seq = zeros(n,2);
