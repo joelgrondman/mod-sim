@@ -1,0 +1,52 @@
+function [M, area, perculating] = generateperc(p,N)
+
+
+    %0 = unmarked, 1 = occupied, 2 = empty
+    M = zeros(2*N+1,2*N+1);
+    M(N+1,N+1)=1;
+    
+    perculating = 0;
+    areaold = 0;
+    area = 1;
+    
+    randomField = rand(2*N+1,2*N+1) > p;
+    
+    %imshow((M==0)*0.5+(M==2))
+    
+    while(area - areaold > 0)
+        
+        %0=> grey 1=>black 2=> white
+        
+        
+        o_M = (M == 1);
+        
+        M_up =    [o_M(2:end,:);     zeros(1,2*N+1)];
+        M_down =  [zeros(1,2*N+1); o_M(1:end-1,:)];
+        M_left =  [o_M(:,2:end)      zeros(2*N+1,1)];
+        M_right = [zeros(2*N+1,1)  o_M(:,1:end-1)];
+        
+        %determine possible grow area
+        %growthArea = (((M_up+M_down+M_left+M_right)>0) == (M==0));
+        growthArea = (M_up+M_down+M_left+M_right)>0;
+        growthArea(M~=0) = 0;
+
+        %empty or occupy
+        growthArea = growthArea.*(randomField + 1);
+
+        %filter out already marked areas
+        M =  M + growthArea;
+        
+        %determine perculation
+        perculating = sum(M(1,:) + M(end,:) + M(:,1) + M(:,end)) > 0;
+        
+        
+        areaold = area;
+        area = sum(sum(M==1));
+        
+        
+    end
+   
+    %imshow((M==0)*0.5+(M==2))
+
+end
+
