@@ -1,4 +1,4 @@
-function [M, area, perculating] = generateperc(p,N)
+function perculation_movie(p,N)
 
     %0 = unmarked, 1 = occupied, 2 = empty
     M = zeros(2*N+1,2*N+1);
@@ -10,7 +10,15 @@ function [M, area, perculating] = generateperc(p,N)
     %logical symbol switched, saves additional logic later
     randomField = rand(2*N+1,2*N+1) > p;
     
-    %imshow((M==0)*0.5+(M==2))
+    writerObj = VideoWriter('out4.avi'); % Name it.
+    writerObj.FrameRate = 60; % How many frames per second.
+    open(writerObj); 
+    
+    figure(1)
+    imshow((M==0)*0.5+(M==2))
+    
+    frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+    writeVideo(writerObj, frame);
     
     %keep growing till area is constant
     while(area - areaold > 0)
@@ -40,11 +48,14 @@ function [M, area, perculating] = generateperc(p,N)
         areaold = area;
         area = sum(M(:)==1);
         
+        pause(0.001)
+        figure(1)
+        imshow((M==0)*0.5+(M==2))
+        frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+        writeVideo(writerObj, frame);
+        
     end
-    
-    perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
-                  sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
-    %imshow((M==0)*0.5+(M==2))
+    close(writerObj);
 
 end
 

@@ -9,7 +9,7 @@ for i = 1:iter
     A = 0;
     perc = 1;
     while(perc == 1)
-        [~,A,perc] = generateperc(p,N);
+        [~,A,perc] = generate_perculation(p,N);
     end
     
     Area(i) = A;
