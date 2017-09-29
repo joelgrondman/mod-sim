@@ -20,11 +20,14 @@ function perculation_movie(p,N)
     frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
     writeVideo(writerObj, frame);
     
+    %check if cluster is perculating
+    perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
+          sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
+    
     %keep growing till area is constant
-    while(area - areaold > 0)
+    while(area - areaold > 0 && ~perculating)
         
         %0=> grey 1=>black 2=> white
-        
         
         o_M = (M == 1);
         %occupied spaces of M shifted in 4 directions
@@ -47,6 +50,10 @@ function perculation_movie(p,N)
         %update area
         areaold = area;
         area = sum(M(:)==1);
+        
+        %check if cluster is perculating
+        perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
+          sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
         
         pause(0.001)
         figure(1)

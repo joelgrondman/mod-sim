@@ -11,13 +11,14 @@ function [M, area, perculating] = generate_perculation(p,N)
     randomField = rand(2*N+1,2*N+1) > p;
     
     %imshow((M==0)*0.5+(M==2))
-    
-    %keep growing till area is constant
-    while(area - areaold > 0)
-        
-        %0=> grey 1=>black 2=> white
-        
-        
+
+    %check if cluster is perculating
+    perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
+          sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
+      
+    %keep growing until area is constant
+    while(area - areaold > 0 && ~perculating)
+
         o_M = (M == 1);
         %occupied spaces of M shifted in 4 directions
         M_up =    [o_M(2:end,:);     zeros(1,2*N+1)];
@@ -40,10 +41,13 @@ function [M, area, perculating] = generate_perculation(p,N)
         areaold = area;
         area = sum(M(:)==1);
         
+        %check if cluster is perculating
+        perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
+              sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
+        
     end
     
-    perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
-                  sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
+
     %imshow((M==0)*0.5+(M==2))
 
 end
