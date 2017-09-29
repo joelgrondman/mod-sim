@@ -1,4 +1,4 @@
-function perculation_movie(p,N)
+function [M, area, perculating] = perculation_movie(N,p,allow_perculation,save)
 
     %0 = unmarked, 1 = occupied, 2 = empty
     M = zeros(2*N+1,2*N+1);
@@ -10,22 +10,26 @@ function perculation_movie(p,N)
     %logical symbol switched, saves additional logic later
     randomField = rand(2*N+1,2*N+1) > p;
     
+
     writerObj = VideoWriter('out4.avi'); % Name it.
     writerObj.FrameRate = 60; % How many frames per second.
-    open(writerObj); 
-    
+    if (save)
+        open(writerObj); 
+    end
     figure(1)
     imshow((M==0)*0.5+(M==2))
     
-    frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
-    writeVideo(writerObj, frame);
+    if (save)
+        frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+        writeVideo(writerObj, frame);
+    end
     
     %check if cluster is perculating
     perculating = (sum(M(1,:)==1) + sum(M(end,:)==1) +...
           sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
     
     %keep growing till area is constant
-    while(area - areaold > 0 && ~perculating)
+    while(area - areaold > 0 && (~perculating || allow_perculation))
         
         %0=> grey 1=>black 2=> white
         
@@ -58,11 +62,16 @@ function perculation_movie(p,N)
         pause(0.001)
         figure(1)
         imshow((M==0)*0.5+(M==2))
-        frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
-        writeVideo(writerObj, frame);
+        
+        if (save)
+            frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+            writeVideo(writerObj, frame);
+        end
         
     end
-    close(writerObj);
+    if (save)
+        close(writerObj);
+    end
 
 end
 

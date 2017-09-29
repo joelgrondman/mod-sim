@@ -1,4 +1,4 @@
-function [M, area, perculating] = generate_perculation(p,N)
+function [M, area, perculating] = generate_perculation(N,p,allow_perculation)
 
     %0 = unmarked, 1 = occupied, 2 = empty
     M = zeros(2*N+1,2*N+1);
@@ -17,7 +17,7 @@ function [M, area, perculating] = generate_perculation(p,N)
           sum(M(:,1)==1) + sum(M(:,end)==1)) > 0;
       
     %keep growing until area is constant
-    while(area - areaold > 0 && ~perculating)
+    while(area - areaold > 0 && (~perculating || allow_perculation))
 
         o_M = (M == 1);
         %occupied spaces of M shifted in 4 directions
