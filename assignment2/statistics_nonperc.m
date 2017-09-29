@@ -1,9 +1,13 @@
 
-p = 0.50;
-N = 400;
-iter = 100;
 
-Area = zeros(iter,1);
+startP = 0.5;
+endP = 0.7;
+stepP = 0.01;
+N = 20;
+iter = 50;
+
+meanS = zeros((endP-startP)/stepP + 1,1);
+stdS = zeros((endP-startP)/stepP + 1,1);
 
 for i = 1:iter
 
