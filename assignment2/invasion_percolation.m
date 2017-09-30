@@ -1,4 +1,4 @@
-function [M, h] = invasion_percolation(N)
+function [M] = invasion_percolation(N)
 
     %0 = unmarked, 1 = occupied
     M = zeros(2*N+1,2*N+1);
@@ -38,8 +38,9 @@ function [M, h] = invasion_percolation(N)
     figure(1)
     imshow(M)
     
-    figure(2)
     newM = M;
     newM(M==0) = nan; 
-    histogram(newM.*randomField)
+    
+    M = reshape(newM.*randomField,[1,numel(newM.*randomField)]);
+    M(isnan(M)) = [];
 end
